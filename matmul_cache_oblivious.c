@@ -3,9 +3,9 @@
 //Program to perform cache oblivious matrix multiplication. 
 
 // define the matrix dimensions A is MxP, B is PxN, and C is MxN
-#define M 32
-#define N 32
-#define P 32
+#define M 4096
+#define N 4096
+#define P 4096
 #define CUTOFF 40
  // calculate C = AxB
  //
@@ -40,7 +40,7 @@ void matmul(float **A, float **B, float **C)
 
 	float sum;
 
-    recur(0,M,0,N,0,P,C,B,A);
+    recur(0,M,0,N,0,P,C,A,B);
     return;
 
 		
