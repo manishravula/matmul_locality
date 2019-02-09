@@ -4,6 +4,10 @@
 
 #args: $1: Name of the code executing. $2 Name of the experiment, $3 Size of the matrix to be passed on to the Python script.
 
+#Make a results subfolder if it doesn't already exist.
+#Expected directory structure: base1/matmul_locality/    -> All c programs
+#			       base1/matmul_locality/newscripts -> This shell script.
+
 gcc -O2 ../$1 -o ./$2.o
 ./create_jobscript_loads.sh $2.o
 ./create_jobscript_stores.sh $2.o
