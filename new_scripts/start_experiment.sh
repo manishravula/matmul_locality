@@ -1,8 +1,15 @@
-gcc -O2 ../matmul_cache_oblivious.c -o ./cobli_$1.o
-./create_jobscript_loads.sh cobli_$1.o
-./create_jobscript_stores.sh cobli_$1.o
-sbatch --wait ./cobli_$1.o_loads.sh 
-sbatch --wait ./cobli_$1.o_stores.sh
-python parse_output_loads.py ./cobli_$1.o $2
-python parse_output_stores.py ./cobli_$1.o $2
-cp *$1*.csv results/
+#Script to start experiments easily and generate results.
+#The script holds the terminal busy until the results are processed. So you might want
+#to multiplex it with tmux/screen. Also, you can't submit jobs while these are going on.
+
+#args: $1: Name of the code executing. $2 Name of the experiment, $3 Size of the matrix to be passed on to the Python script.
+
+gcc -O2 ../$1 -o ./$2.o
+./create_jobscript_loads.sh $2.o
+./create_jobscript_stores.sh $2.o
+sbatch --wait ./$2.o_loads.sh 
+sbatch --wait ./$2.o_stores.sh
+python parse_output_loads.py ./$2.o $3
+python parse_output_stores.py ./$2.o $3
+cp *$2*.csv results/
+tail results/*$2*.csv -n 4
