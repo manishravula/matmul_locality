@@ -37,7 +37,7 @@ l1_locality_list = []
 l2_locality_list = []
 l3_locality_list = []
 
-outfile.write("Cycles, Instructions, L1 Loads, L1 Load Misses, LLC Loads, LLC Load Misses, Time Elapsed, GFLOPS, L1 Load Locality, LLC Load Locality\n")
+outfile.write("Cycles, Instructions, L1 Loads, L1 Load Misses, L2 Load Hits, L3 Load Hits, Time Elapsed, GFLOPS, L1 Load Locality, L2 Load Locality, L3 Load Locality\n")
 
 while(1):
 	line = infile.readline()
@@ -67,11 +67,11 @@ while(1):
         l1_load_misses = line.lstrip().split(' ',1)[0]
 	l1_load_misses = l1_load_misses.replace(',', '')
         line = infile.readline()
-        llc_loads = line.lstrip().split(' ',1)[0]
-	llc_loads = llc_loads.replace(',', '')
+        l2_load_hits = line.lstrip().split(' ',1)[0]
+	l2_load_hits = l2_load_hits.replace(',', '')
         line = infile.readline()
-        llc_load_misses = line.lstrip().split(' ',1)[0]
-        llc_load_misses = llc_load_misses.replace(',', '')
+        l3_load_hits = line.lstrip().split(' ',1)[0]
+        l3_load_hits = l3_load_hits.replace(',', '')
         line = infile.readline()
 	line = infile.readline()
 	time_elapsed = line.lstrip().split(' ',1)[0]
@@ -86,14 +86,17 @@ while(1):
 	l1_load_locality = float(l1_load_hits)/float(l1_loads) 
 
 
-	l3_load_hits = int(llc_loads) - int(llc_load_misses)
- 	l3_load_locality = float(l3_load_hits)/float(llc_loads)
+	l2_load_locality = float(l2_load_hits) / float(l1_load_misses)
+
+	l3_loads = int(l1_load_misses) - int(l2_load_hits)
+ 	l3_load_locality = float(l3_load_hits) / float(l3_loads)
 
 	gflops_list.append(gflops)
 	l1_locality_list.append(l1_load_locality)
+	l2_locality_list.append(l2_load_locality)
 	l3_locality_list.append(l3_load_locality)
 
-	outfile.write(cycles + ", " + instructions + ", " + l1_loads + ", " + l1_load_misses + ", " + llc_loads + ", " + llc_load_misses + ", " + time_elapsed + ", " + str(gflops) + ", " + str(l1_load_locality) + ", " + str(l3_load_locality) + "\n")		
+	outfile.write(cycles + ", " + instructions + ", " + l1_loads + ", " + l1_load_misses + ", " + l2_load_hits + ", " + l3_load_hits + ", " + time_elapsed + ", " + str(gflops) + ", " + str(l1_load_locality) + ", " + str(l2_load_locality) + ", " + str(l3_load_locality) + "\n")		
 
 
 
@@ -109,10 +112,10 @@ l1_locality_stddev = stddev(l1_locality_list)
 l1_locality_rel_sd = l1_locality_stddev * 100.00 / l1_locality_mean
 outfile.write("L1 LOAD LOCALITY, " + str(l1_locality_mean) + ", " + str(l1_locality_stddev) + ", " + str(l1_locality_rel_sd) + "%" + "\n")
 
-#l2_locality_mean = mean(l2_locality_list)
-#l2_locality_stddev = stddev(l2_locality_list)
-#l2_locality_rel_sd = l2_locality_stddev * 100.00 / l2_locality_mean
-#outfile.write("L2 LOAD LOCALITY, " + str(l2_locality_mean) + ", " + str(l2_locality_stddev) + ", " + str(l2_locality_rel_sd) + "%" + "\n")
+l2_locality_mean = mean(l2_locality_list)
+l2_locality_stddev = stddev(l2_locality_list)
+l2_locality_rel_sd = l2_locality_stddev * 100.00 / l2_locality_mean
+outfile.write("L2 LOAD LOCALITY, " + str(l2_locality_mean) + ", " + str(l2_locality_stddev) + ", " + str(l2_locality_rel_sd) + "%" + "\n")
 
 l3_locality_mean = mean(l3_locality_list)
 l3_locality_stddev = stddev(l3_locality_list)

@@ -31,7 +31,7 @@ echo "lscpu" >> "$1"_loads.sh
 for i in {1..20}
 do
 #echo "./pmu-tools/pmu-tools/ocperf.py stat -e cycles:u,instructions:u,L1-dcache-loads:u,l2_rqsts.demand_data_rd_hit:u,l2_rqsts.demand_data_rd_miss:u,LLC-load-misses:u ./"$1"" >> "$1"_loads.sh
-echo "perf stat -e cycles:u,instructions:u,L1-dcache-loads:u,L1-dcache-load-misses:u,LLC-loads:u,LLC-load-misses:u ./"$1"" >> "$1"_loads.sh
+echo "./pmu-tools/pmu-tools/ocperf.py stat -e cycles:u,instructions:u,L1-dcache-loads:u,L1-dcache-load-misses:u,l2_rqsts.demand_data_rd_hit:u,offcore_response.demand_data_rd.l3_hit.any_snoop:u ./"$1"" >> "$1"_loads.sh
 done
 #echo "done" >> "$1"_loads.sh
 
