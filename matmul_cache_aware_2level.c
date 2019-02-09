@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 // define the matrix dimensions A is MxP, B is PxN, and C is MxN
  #define M 32
@@ -17,6 +18,8 @@ void matmul(float **A, float **B, float **C)
 	int b1 = 16;
 	int b2 = 128;
 	int xx, yy;
+	if( b2 > M)
+		b2 = M;
 	
 
 	for(xx =0; xx < M; xx +=b2)
@@ -30,7 +33,7 @@ void matmul(float **A, float **B, float **C)
 					for (kk = 0; kk < P; kk += b1) 
 					{	 
 						for (i = ii; i < ii+b1; i++) 
-						{		 
+						{		 	
 							for (j = jj; j < jj + b1; j++) 
 							{	 
 								sum = 0;
