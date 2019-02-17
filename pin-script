@@ -1,0 +1,19 @@
+#!/bin/bash
+
+
+#SBATCH -J myjob           # Job name
+#SBATCH -o myjob.out       # Name of stdout output file
+#SBATCH -e myjob.err       # Name of stderr error file
+#SBATCH -p skx-normal      # Queue (partition) name
+#SBATCH -N 1               # Total # of nodes (must be 1 for serial)
+#SBATCH -n 1               # Total # of mpi tasks (should be 1 for serial)
+#SBATCH -t 06:00:00        # Run time (hh:mm:ss)
+#SBATCH --mail-user=irenezhang@utexas.edu
+#SBATCH --mail-type=all    # Send email at begin and end of job
+#SBATCH -A EE382N-20 # Allocation name (req'd if you have more than 1)
+
+
+lscpu
+
+module unload xalt
+../../../pin -t obj-intel64/dcache.so -a 8 -b 64 -c 32 -aa 16 -bb 64 -cc 1024 -- ./matmul_4096
